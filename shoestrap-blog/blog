@@ -29,7 +29,7 @@ wget https://go.googlecode.com/files/go1.2.linux-amd64.tar.gz
 tar -C /usr/local -xzf go1.2.linux-amd64.tar.gz
 mkdir $HOME/go
 add_line "export GOPATH=$HOME/go" /etc/environment
-add_line "export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin" ~/.bashrc
+
 
 # Install GVM
 curl -s get.gvmtool.net | bash
@@ -39,7 +39,6 @@ gvm install gradle
 
 add_line "export GROOVY_HOME='~/.gvm/groovy/current/'" /etc/environment
 add_line "export GRADLE_HOME='~/.gvm/gradle/current/'" /etc/environment
-add_line "export PATH=$PATH:$GROOVY_HOME/bin:$GRADLE_HOME/bin" /etc/environment
 source /etc/environment
 
 # Fail2Ban
@@ -70,6 +69,8 @@ package 'vim'
 package 'build-essential'
 
 # Install webfront
+add_line "export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin" /etc/environment
+source /etc/environment
 go get github.com/nf/webfront
 go install github.com/nf/webfront
 
