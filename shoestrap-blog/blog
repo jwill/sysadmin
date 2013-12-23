@@ -71,6 +71,7 @@ package 'build-essential'
 # Install webfront
 add_line "export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin" /etc/environment
 source /etc/environment
+source ~/.bashrc
 go get github.com/nf/webfront
 go install github.com/nf/webfront
 
