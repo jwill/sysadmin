@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if ! is_installed $*; then
+    apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 7BF6DFCD
+    copy 'mosh.list' '/etc/apt/sources.list.d/'
+    package_update
+    package 'mosh'
+    set_installed $*
+fi

@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Initialization - DO NOT REMOVE
+. helpers/initialize
+
+##############################################################
+### Customizations start here ################################
+##############################################################
+
+fail_if_not_root  # Comment out if 'root' is not required.
+
+package python-software-properties
+package software-properties-common
+package_update
+package 'unzip'
+package 'curl'
+
+# Suppress Java7 license prompt
+echo debconf shared/accepted-oracle-license-v1-1 select true | \
+  sudo debconf-set-selections
+
+recipe 'mosh'
+recipe 'oracle-java7'
+package 'tomcat7'
+
+add_line "export JAVA_HOME=/usr/lib/jvm/java-7-oracle" /etc/environment
+add_line "export CATALINA_HOME=/usr/share/tomcat7" /etc/environment
+
+# Install GVM
+curl -s get.gvmtool.net | bash
+source ~/.gvm/bin/gvm-init.sh
+gvm install grails
+gvm install groovy
+gvm install gradle
+
+add_line "export GROOVY_HOME='~/.gvm/groovy/current/'" /etc/environment
+add_line "export GRAILS_HOME='~/.gvm/grails/current/'" /etc/environment
+add_line "export GRADLE_HOME='~/.gvm/gradle/current/'" /etc/environment
+add_line "export WAR_DIR='/var/lib/tomcat7/webapps'" /etc/environment
+add_line "export PATH=$PATH:$CATALINA_HOME/bin:$GROOVY_HOME/bin:$GRADLE_HOME/bin:$GRAILS_HOME/bin" /etc/environment
+source /etc/environment
+
+
+# Fail2Ban
+package 'fail2ban'
+
+# Automatic Security Updates
+package unattended-upgrades
+touch /etc/apt/apt.conf.d/10periodic
+add_line 'APT::Periodic::Update-Package-Lists "1";' /etc/apt/apt.conf.d/10periodic
+add_line 'APT::Periodic::Download-Upgradeable-Packages "1";' /etc/apt/apt.conf.d/10periodic
+add_line 'APT::Periodic::AutocleanInterval "7";' /etc/apt/apt.conf.d/10periodic
+add_line 'APT::Periodic::Unattended-Upgrade "1";' /etc/apt/apt.conf.d/10periodic
+
+# Install Logwatch
+package logwatch 
+add_line "/usr/sbin/logwatch --output mail --mailto eng@saasmarkets.com --detail high" /etc/cron.daily/00logwatch
+
+# Firewall
+ufw allow 22
+ufw allow 443
+ufw allow 80
+# RabbitMQ ports
+ufw allow 35197
+ufw allow 4369
+ufw allow 15672
+# Mosh ports
+ufw allow proto udp to any port 60000:61000
+ufw enable
+
+package 'git-core'
+package 'vim'
+package 'build-essential'
+
+
+### Show the Finished banner
+finished
+

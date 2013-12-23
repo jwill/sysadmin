@@ -1,0 +1,3 @@
+# Mosh repository list
+deb http://ppa.launchpad.net/keithw/mosh/ubuntu raring main 
+deb-src http://ppa.launchpad.net/keithw/mosh/ubuntu raring main 
