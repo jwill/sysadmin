@@ -29,20 +29,16 @@ wget https://go.googlecode.com/files/go1.2.linux-amd64.tar.gz
 tar -C /usr/local -xzf go1.2.linux-amd64.tar.gz
 mkdir $HOME/go
 add_line "export GOPATH=$HOME/go" /etc/environment
-add_line "export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin" /etc/environment
 
 # Install GVM
 curl -s get.gvmtool.net | bash
 source ~/.gvm/bin/gvm-init.sh
-gvm install grails
 gvm install groovy
 gvm install gradle
 
 add_line "export GROOVY_HOME='~/.gvm/groovy/current/'" /etc/environment
-add_line "export GRAILS_HOME='~/.gvm/grails/current/'" /etc/environment
 add_line "export GRADLE_HOME='~/.gvm/gradle/current/'" /etc/environment
-add_line "export WAR_DIR='/var/lib/tomcat7/webapps'" /etc/environment
-add_line "export PATH=$PATH:$GROOVY_HOME/bin:$GRADLE_HOME/bin:$GRAILS_HOME/bin" /etc/environment
+add_line "export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin:$GROOVY_HOME/bin:$GRADLE_HOME/bin" /etc/environment
 source /etc/environment
 
 # Fail2Ban
@@ -58,7 +54,7 @@ add_line 'APT::Periodic::Unattended-Upgrade "1";' /etc/apt/apt.conf.d/10periodic
 
 # Install Logwatch
 package logwatch 
-add_line "/usr/sbin/logwatch --output mail --mailto eng@saasmarkets.com --detail high" /etc/cron.daily/00logwatch
+add_line "/usr/sbin/logwatch --output mail --mailto James.L.Williams@gmail.com --detail high" /etc/cron.daily/00logwatch
 
 # Firewall
 ufw allow 22
