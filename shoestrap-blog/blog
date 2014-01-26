@@ -18,6 +18,8 @@ package 'emacs24'
 package 'emacs24-el'
 package 'texlive'
 package 'texlive-latex-extra' 
+package 'texlive-fonts-recommended'
+
 
 
 # Suppress Java7 license prompt
