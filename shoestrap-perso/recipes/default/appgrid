@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if ! is_installed $*; then
+    apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 3B765FAE
+    copy 'appgrid.list' '/etc/apt/sources.list.d/'
+    package_update
+    package 'appgrid'
+    set_installed $*
+fi

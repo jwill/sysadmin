@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if ! is_installed $*; then
+    apt-key adv --recv-keys --keyserver keyserver.ubuntu.com EEA14886
+    copy 'oracle7.list' '/etc/apt/sources.list.d/'
+    package_update
+    package 'oracle-java7-installer'
+    set_installed $*
+fi

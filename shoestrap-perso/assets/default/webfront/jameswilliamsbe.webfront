@@ -1,0 +1,4 @@
+[
+	{"Host": "jameswilliams.be", "Serve":"/home/root/sites/jameswilliams.be/blog"},
+	{"Host": "portfolio.jameswilliams.be", "Serve":"/home/root/sites/jameswilliams.be/portfolio"}
+]

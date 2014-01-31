@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Initialization - DO NOT REMOVE
+. helpers/initialize
+
+##############################################################
+### Customizations start here ################################
+##############################################################
+
+fail_if_not_root  # Comment out if 'root' is not required.
+
+package python-software-properties
+package software-properties-common
+package_update
+package 'unzip'
+package 'curl'
+package 'emacs24'
+package 'emacs24-el'
+package 'texlive'
+package 'texlive-latex-extra' 
+package 'texlive-fonts-recommended'
+
+
+
+# Suppress Java7 license prompt
+echo debconf shared/accepted-oracle-license-v1-1 select true | \
+  sudo debconf-set-selections
+
+recipe 'mosh'
+recipe 'oracle-java7'
+
+add_line "export JAVA_HOME=/usr/lib/jvm/java-7-oracle" /etc/environment
+
+# Install Go
+wget https://go.googlecode.com/files/go1.2.linux-amd64.tar.gz
+tar -C /usr/local -xzf go1.2.linux-amd64.tar.gz
+mkdir $HOME/go
+add_line "export GOPATH=$HOME/go" /etc/environment
+
+
+# Install GVM
+curl -s get.gvmtool.net | bash
+source ~/.gvm/bin/gvm-init.sh
+gvm install groovy
+gvm install gradle
+
+add_line "export GROOVY_HOME='~/.gvm/groovy/current/'" /etc/environment
+add_line "export GRADLE_HOME='~/.gvm/gradle/current/'" /etc/environment
+source /etc/environment
+
+# Automatic Security Updates
+package unattended-upgrades
+touch /etc/apt/apt.conf.d/10periodic
+add_line 'APT::Periodic::Update-Package-Lists "1";' /etc/apt/apt.conf.d/10periodic
+add_line 'APT::Periodic::Download-Upgradeable-Packages "1";' /etc/apt/apt.conf.d/10periodic
+add_line 'APT::Periodic::AutocleanInterval "7";' /etc/apt/apt.conf.d/10periodic
+add_line 'APT::Periodic::Unattended-Upgrade "1";' /etc/apt/apt.conf.d/10periodic
+
+package 'git-core'
+package 'git-cola'
+package 'vim'
+package 'vim-gtk'
+package 'build-essential'
+
+
+# Install webfront
+add_line "export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin" /etc/environment
+source /etc/environment
+source ~/.bashrc
+go get github.com/nf/webfront
+go install github.com/nf/webfront
+
+### Show the Finished banner
+finished
+
