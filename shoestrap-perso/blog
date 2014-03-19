@@ -48,6 +48,9 @@ add_line "export GROOVY_HOME='~/.gvm/groovy/current/'" /etc/environment
 add_line "export GRADLE_HOME='~/.gvm/gradle/current/'" /etc/environment
 source /etc/environment
 
+# Fail2Ban
+package 'fail2ban'
+
 # Automatic Security Updates
 package unattended-upgrades
 touch /etc/apt/apt.conf.d/10periodic
@@ -56,14 +59,21 @@ add_line 'APT::Periodic::Download-Upgradeable-Packages "1";' /etc/apt/apt.conf.d
 add_line 'APT::Periodic::AutocleanInterval "7";' /etc/apt/apt.conf.d/10periodic
 add_line 'APT::Periodic::Unattended-Upgrade "1";' /etc/apt/apt.conf.d/10periodic
 
-package 'git-core'
-package 'git-cola'
-package 'vim'
-package 'vim-gtk'
-package 'build-essential'
-package 'inkscape'
-package 'blender'
+# Install Logwatch
+package logwatch 
+add_line "/usr/sbin/logwatch --output mail --mailto James.L.Williams@gmail.com --detail high" /etc/cron.daily/00logwatch
 
+# Firewall
+ufw allow 22
+ufw allow 443
+ufw allow 80
+# Mosh ports
+ufw allow proto udp to any port 60000:61000
+ufw enable
+
+package 'git-core'
+package 'vim'
+package 'build-essential'
 
 # Install webfront
 add_line "export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin" /etc/environment
